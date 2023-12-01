@@ -21,7 +21,6 @@ const actions = {
 
         } catch (error) {
             console.log(error)
-            console.log("heeee")
             dispatch({
                 type: DAILY_DATA_ERROR,
             });

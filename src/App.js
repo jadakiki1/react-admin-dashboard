@@ -10,8 +10,6 @@ import { ColorModeContext, useMode } from "./theme";
 
 function App() {
 
-  const [data, setData] = useState([{daily: null, hourly: null}]);
-
 
   const [theme, colorMode] = useMode();
   const [isSidebar, setIsSidebar] = useState(true);
@@ -21,9 +19,9 @@ function App() {
     <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <div className="app">
+        <div className="app" style={{ display: 'flex', height: '100vh' }}>
           <Sidebar isSidebar={isSidebar} />
-          <main className="content">
+          <main className="content" style={{ overflowY: 'scroll', width: '100%' }}>
             <Topbar setIsSidebar={setIsSidebar} />
             <Routes>
               <Route path="/" element={<Dashboard />} />

@@ -4,7 +4,8 @@ const defaultState = {
     hourly: []
 };
 
-function hourDataReducer ( state = defaultState, action) {
+function hourDataReducer ( state = defaultState, action)  {
+    // console.log(action)
     switch (action.type) {
         case HOUR_DATA_REQUEST:
             return Object.assign({}, state, {
@@ -12,6 +13,7 @@ function hourDataReducer ( state = defaultState, action) {
             });
 
             case HOUR_DATA_SUCCESS:
+                console.log(action)
                 return Object.assign({}, state, {
                     ...state,
                     hourlyTable: action.payload.hourlyTable

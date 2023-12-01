@@ -5,8 +5,8 @@ const defaultState = {
 };
 
 function dailyDataReducer ( state = defaultState, action) {
-    console.log(action)
-    console.log(state)
+    // console.log(action)
+    // console.log(state)
     switch (action.type) {
         
         case DAILY_DATA_REQUEST:

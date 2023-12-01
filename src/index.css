@@ -32,3 +32,7 @@ body,
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
+
+.MuiDialogContent-root {
+  padding: 0 !important;
+}
