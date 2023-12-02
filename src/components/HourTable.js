@@ -25,7 +25,7 @@ function HourTable({ groupBy, dateRange}) {
         
         const filteredData = Array.isArray(json)
         ? json.filter((item) => {
-            const itemDate = new Date(item.time); 
+            const itemDate = new Date(item.dateTime_Key); 
             return itemDate >= dateRange.startDate && itemDate <= dateRange.endDate;
           })
         : [json];
@@ -45,7 +45,7 @@ function HourTable({ groupBy, dateRange}) {
 
 
   const allColumns = [
-    { field: 'time', headerName: 'Time', width: 150},
+    { field: 'dateTime_Key', headerName: 'DateTime_Key', width: 150},
     {
       field: 'neAlias',
       headerName: 'NeAlias',
