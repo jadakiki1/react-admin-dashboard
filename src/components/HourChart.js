@@ -3,14 +3,23 @@ import axios from 'axios';
 import { LineChart } from '@mui/x-charts/LineChart';
 import { Select, MenuItem, FormControl, InputLabel, Box } from '@mui/material';
 
-const HourChart = ({ dateRange }) => {
+const HourChart = ({ aggType, dateRange }) => {
   const [rawData, setRawData] = useState([]);
   const [selectedKPI, setSelectedKPI] = useState('RfInputPower');
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:5179/api/Data/hourly');
+
+        let apiUrl; 
+
+        if (aggType === "neAlias") {
+          apiUrl = 'http://localhost:5179/api/Data/hourly/NeAlias';
+        } else if (aggType === "neType") {
+            apiUrl = 'http://localhost:5179/api/Data/hourly/NeType';
+        }
+
+        const response = await axios.get(apiUrl);
         setRawData(response.data || []);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -18,15 +27,14 @@ const HourChart = ({ dateRange }) => {
     };
 
     fetchData();
-  }, []);
+  }, [aggType]);
 
   const handleKPIChange = (event) => {
     setSelectedKPI(event.target.value);
   };
 
-  
   const renderKPISelector = () => (
-    <FormControl margin="normal">
+    <FormControl color='secondary' margin="normal">
       <InputLabel id="kpi-selector-label">Select KPI</InputLabel>
       <Select
         labelId="kpi-selector-label"
@@ -38,7 +46,7 @@ const HourChart = ({ dateRange }) => {
         <MenuItem value="RfInputPower">Rf Input Power</MenuItem>
         <MenuItem value="MaxRxLevel">Max Rx Level</MenuItem>
         <MenuItem value="Rsl_Deviation">RSL Deviation</MenuItem>
-      
+       
       </Select>
     </FormControl>
   );
@@ -76,7 +84,7 @@ const HourChart = ({ dateRange }) => {
         data: filteredData.map(item => new Date(item.dateTime_Key)),
         label: 'DateTime',
         valueFormatter: date => {
-          const options = { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric' };
+          const options = { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric' };
           return new Intl.DateTimeFormat('en-US', options).format(date);
         },
       },
@@ -89,12 +97,11 @@ const HourChart = ({ dateRange }) => {
     series: [
       {
         id: selectedKPI,
-        label: selectedKPI,
         data: selectedData,
       },
     ],
-    width: 1400,
-    height: 400,
+    width: 1500,
+    height: 600,
     margin: { left: 70 },
   };
 
@@ -105,7 +112,7 @@ const HourChart = ({ dateRange }) => {
   return (
     <Box>
       {renderKPISelector()}
-      <h3>Performance Chart</h3>
+    
       <LineChart
         {...chartData}
       />

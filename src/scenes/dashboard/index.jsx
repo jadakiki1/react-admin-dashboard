@@ -143,7 +143,7 @@ const Dashboard = (props) => {
 
       {/* Box for Chart */}
       <Box margin="20px">
-        {timeOption === 'hourly' ? <HourChart dateRange={selectedDateRange}/> : <DailyChart dateRange={selectedDateRange}/>}
+        {timeOption === 'hourly' ? <HourChart aggType={neOption} dateRange={selectedDateRange}/> : <DailyChart aggType={neOption} dateRange={selectedDateRange}/>}
       </Box>
 
 
@@ -151,9 +151,9 @@ const Dashboard = (props) => {
  {/* Box for Grid */}
  <Box sx={{ height: 400, width: '90%', margin: '60px' }}>
         {timeOption === 'hourly' ? (
-          <HourTable groupBy={neOption} dateRange={selectedDateRange} />
+          <HourTable aggType={neOption} timeType={timeOption} dateRange={selectedDateRange} />
         ) : (
-          <DailyTable groupBy={neOption} dateRange={selectedDateRange} />
+          <DailyTable aggType={neOption} timeType={timeOption} dateRange={selectedDateRange} />
         )}
       </Box>
     </Box>

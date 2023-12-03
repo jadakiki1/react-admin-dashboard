@@ -33,6 +33,10 @@ body,
   background: #555;
 }
 
+.MuiPaper-root{
+  max-width: 1000px !important;
+}
+
 .MuiDialogContent-root {
   padding: 0 !important;
 }

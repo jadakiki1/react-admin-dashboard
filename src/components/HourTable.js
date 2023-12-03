@@ -3,31 +3,39 @@ import { DataGrid } from '@mui/x-data-grid';
 import React, { useState, useEffect } from 'react';
 
 
-function HourTable({ groupBy, dateRange}) {
-  
+function HourTable({ aggType, timeType, dateRange}) {
+ 
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
-
   useEffect(() => {
-    
+
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        
-        const response = await fetch('http://localhost:5179/api/Data/hourly');
+
+        let apiUrl;
+
+        if (aggType === "neAlias" && timeType === "hourly") {
+            apiUrl = 'http://localhost:5179/api/Data/hourly/NeAlias';
+        } else if (aggType === "neType" && timeType === "hourly") {
+            apiUrl = 'http://localhost:5179/api/Data/hourly/NeType';
+        }
+
+        const response = await fetch(apiUrl);
 
         if (!response.ok) {
-          throw new Error('Network response was not ok');
+            throw new Error('Network response was not ok');
         }
+
         const json = await response.json();
-        
+            
         const filteredData = Array.isArray(json)
         ? json.filter((item) => {
             const itemDate = new Date(item.dateTime_Key); 
             return itemDate >= dateRange.startDate && itemDate <= dateRange.endDate;
-          })
+            })
         : [json];
 
         setData(filteredData);
@@ -41,7 +49,8 @@ function HourTable({ groupBy, dateRange}) {
     fetchData();
     console.log(data)
 
-  }, [dateRange]); 
+  }, [aggType, timeType, dateRange]); 
+
 
 
   const allColumns = [
@@ -72,18 +81,16 @@ function HourTable({ groupBy, dateRange}) {
       width: 150
     },
   ]; 
-
-
+  
   const filteredColumns = allColumns.filter(column => {
-    if (groupBy === 'neAlias' && column.field === 'neType') {
+    if (aggType === 'neAlias' && column.field === 'neType') {
       return false;
     }
-    if (groupBy === 'neType' && column.field === 'neAlias') {
+    if (aggType === 'neType' && column.field === 'neAlias') {
       return false;
     }
     return true;
   });
-  
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
@@ -97,6 +104,7 @@ function HourTable({ groupBy, dateRange}) {
 
     return (
       <Box sx={{ height: 400, width: '100%' }}>
+        
         <DataGrid
           rows={dataWithIds}
           columns={filteredColumns}
